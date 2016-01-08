@@ -72,12 +72,8 @@ else
   exit 3
 fi
 
-
 release_url="https://storage.googleapis.com/kubernetes-release/release/${release}/bin/${platform}/${arch}/kubectl"
 file=${CACHE_DIR}/${release}_${platform}_${arch}_kubectl
-
-
-
 
 if [ ! -f $file ]; then
   echo "Archivo no encontrado en cache, descargando" | indent
@@ -92,11 +88,8 @@ if [ ! -f $file ]; then
 fi
 
 
-
-
-
-
 filedest=$BUILD_DIR/.kubernetes/bin/kubectl
 cp $file $filedest
 chmod +x ${file}
 echo "Done" | indent
+exit 0
