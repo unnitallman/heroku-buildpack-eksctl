@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# bin/compile <build-dir> <cache-dir>
 
 set -o errexit    # always exit on error
 #set -o pipefail   # don't ignore exit codes when piping output
@@ -90,6 +91,6 @@ fi
 
 filedest=$BUILD_DIR/.kubernetes/bin/kubectl
 cp $file $filedest
-chmod +x ${file}
+chmod +x $file
 echo "Done" | indent
 exit 0

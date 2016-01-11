@@ -1,1 +1,3 @@
-echo "Holas"
+#!/usr/bin/env bash
+
+echo "--- {}"
