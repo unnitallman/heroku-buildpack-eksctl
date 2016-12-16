@@ -91,6 +91,6 @@ fi
 
 filedest=$BUILD_DIR/.kubernetes/bin/kubectl
 cp $file $filedest
-chmod +x $file
+chmod +x $filedest
 echo "Done" | indent
 exit 0
