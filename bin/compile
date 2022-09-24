@@ -25,7 +25,7 @@ indent() {
 release_url="https://github.com/weaveworks/eksctl/releases/download/v0.112.0/eksctl_Linux_amd64.tar.gz"
 file=${CACHE_DIR}/eksctl
 
-wget -q -${release_url} | tar xvfz > ${file}
+wget -qO- ${release_url} | tar xvz -C ${file}
 
 filedest=$BUILD_DIR/.eksctl/bin/eksctl
 cp $file $filedest
