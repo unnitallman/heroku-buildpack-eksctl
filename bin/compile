@@ -12,84 +12,23 @@ ENV_DIR=${3:-}
 BP_DIR=$(cd $(dirname ${0:-}); cd ..; pwd)
 
 
-mkdir -p "$BUILD_DIR/.kubernetes/bin"
+mkdir -p "$BUILD_DIR/.eksctl/bin"
 cd $BUILD_DIR
 
 mkdir -p $BUILD_DIR/.profile.d
 cp $BP_DIR/profile/* $BUILD_DIR/.profile.d/
 
-# source $BP_DIR/lib/out.sh
-# source $BP_DIR/lib/tools.sh
-#
 indent() {
   sed -u 's/^/       /'
 }
 
+release_url="https://github.com/weaveworks/eksctl/releases/download/v0.112.0/eksctl_Linux_amd64.tar.gz"
+file=${CACHE_DIR}/eksctl
+
+wget -q -O ${file} ${release_url}
 
 
-# [ $# -eq 0 ] && { echo "Usage: $0 format" ; exit 1; }
-
-if [ ! -f $ENV_DIR/KUBERNETES_VERSION ]; then
-  echo "Buscando ultima version" | indent
-  latest_url="https://storage.googleapis.com/kubernetes-release/release/stable.txt"
-  release=$(wget ${latest_url} -q -O -)
-else
-  echo "Version definida." | indent
-  release=$(cat $ENV_DIR/KUBERNETES_VERSION);
-fi
-
-if [[ $release != v* ]]; then
-  release="v${release}"
-fi
-
-
-echo "Version $release" | indent;
-
-
-
-uname=$(uname)
-if [ "${uname}" = "Darwin" ]; then
-  platform="darwin"
-elif [ "${uname}" = "Linux" ]; then
-  platform="linux"
-else
-  echo "Unknown, unsupported platform: (${uname})."
-  echo "Supported platforms: Linux, Darwin."
-  echo "Bailing out."
-  exit 2
-fi
-
-machine=$(uname -m)
-if [ "${machine}" = "x86_64" ]; then
-  arch="amd64"
-elif [ "${machine}" = "i686" ]; then
-  arch="386"
-elif [ "${machine}" = "arm*" ]; then
-  arch="arm"
-else
-  echo "Unknown, unsupported architecture (${machine})."
-  echo "Supported architectures x86_64, i686, arm*"
-  echo "Bailing out."
-  exit 3
-fi
-
-release_url="https://storage.googleapis.com/kubernetes-release/release/${release}/bin/${platform}/${arch}/kubectl"
-file=${CACHE_DIR}/${release}_${platform}_${arch}_kubectl
-
-if [ ! -f $file ]; then
-  echo "Archivo no encontrado en cache, descargando" | indent
-  if [[ $(which wget) ]]; then
-    wget -q -O ${file} ${release_url}
-  elif [[ $(which curl) ]]; then
-    curl -s -L -o ${file} ${release_url}
-  else
-    echo "Couldn't find curl or wget.  Bailing out."
-    exit 1
-  fi
-fi
-
-
-filedest=$BUILD_DIR/.kubernetes/bin/kubectl
+filedest=$BUILD_DIR/.eksctl/bin/eksctl
 cp $file $filedest
 chmod +x $filedest
 echo "Done" | indent
